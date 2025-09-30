@@ -1,55 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Overlay</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.6);
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-             opacity: 0.1;
-        }
-        .overlay-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            padding: 20px;opacity: 0.1;
-        }
-        .overlay-title {
-            font-size: 32px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .overlay-content {
-            font-size: 24px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Channel List Overlay</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    
+    /* Modal container */
+    .modal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+    }
+    
+    /* Channel list modal */
+    .channel-modal {
+      width: 350px;
+      max-height: 80vh;
+      background-color: rgba(0, 0, 0, 0.85);
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Modal header */
+    .modal-header {
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .modal-title {
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    /* Channel list */
+    .channel-list {
+      max-height: calc(80vh - 50px);
+      overflow-y: auto;
+    }
+    
+    /* Channel item */
+    .channel-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background-color 0.2s ease;
+    }
+    
+    .channel-item:last-child {
+      border-bottom: none;
+    }
+    
+    .channel-logo {
+      width: 40px;
+      height: 40px;
+      margin-right: 15px;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .channel-info {
+      flex: 1;
+    }
+    
+    .channel-name {
+      color: white;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    
+    .channel-program {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+    }
+    
+    /* Selected state */
+    .channel-item.selected {
+      background-color: rgba(0, 102, 204, 0.7);
+    }
+    
+    .channel-item.selected .channel-name,
+    .channel-item.selected .channel-program {
+      color: white;
+    }
+    
+    /* Scrollbar styling */
+    .channel-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    
+    .channel-list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    .channel-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+    
+    /* Footer */
+    .modal-footer {
+      padding: 10px 15px;
+      background-color: rgba(0, 0, 0, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <div class="overlay-container">
-      <div class="overlay-title">TV Overlay</div>
-      <div class="overlay-content">
-          Press any key to interact with this overlay.<br>
-          Press BACK to return to the video.
+  <div class="modal-container">
+    <div class="channel-modal">
+      <div class="modal-header">
+        <div class="modal-title">Channel List</div>
+      </div>
+      
+      <div class="channel-list">
+        <div class="channel-item selected">
+          <div class="channel-logo">1</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Sports</div>
+            <div class="channel-program">Premier League: Arsenal vs Liverpool</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">2</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Movies</div>
+            <div class="channel-program">The Avengers (2012)</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">3</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY News</div>
+            <div class="channel-program">Evening News</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">4</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Kids</div>
+            <div class="channel-program">SpongeBob SquarePants</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">5</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Documentary</div>
+            <div class="channel-program">Planet Earth II</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">6</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Music</div>
+            <div class="channel-program">Top 40 Countdown</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">7</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Comedy</div>
+            <div class="channel-program">Stand-up Special</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">8</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Drama</div>
+            <div class="channel-program">Breaking Bad S03E10</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">9</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Sci-Fi</div>
+            <div class="channel-program">Star Trek: Discovery</div>
+          </div>
+        </div>
+        
+        <div class="channel-item">
+          <div class="channel-logo">10</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Reality</div>
+            <div class="channel-program">Master Chef</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        Use ↑↓ to navigate • OK to select • BACK to close
       </div>
     </div>
+  </div>
 
-    <script>
-        // Send key events back to the native layer
-        document.addEventListener('keydown', function(event) {
-            // This will be captured by the native layer
-            console.log('Key pressed in overlay:', event.keyCode);
-        });
-    </script>
+  <script>
+    // Handle keyboard navigation
+    let selectedIndex = 0;
+    const channelItems = document.querySelectorAll('.channel-item');
+    
+    document.addEventListener('keydown', function(event) {
+      // Remove selected class from all items
+      channelItems.forEach(item => item.classList.remove('selected'));
+      
+      // Handle arrow keys
+      if (event.key === 'ArrowDown') {
+        selectedIndex = (selectedIndex + 1) % channelItems.length;
+      } else if (event.key === 'ArrowUp') {
+        selectedIndex = (selectedIndex - 1 + channelItems.length) % channelItems.length;
+      }
+      
+      // Add selected class to current item
+      channelItems[selectedIndex].classList.add('selected');
+      
+      // Ensure the selected item is visible
+      channelItems[selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  </script>
 </body>
 </html>
