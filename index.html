@@ -152,7 +152,87 @@
         <div class="modal-title">Channel List</div>
       </div>
 
-      <div id="channelList" class="channel-list"></div>
+      <div class="channel-list">
+        <div class="channel-item selected">
+          <div class="channel-logo">1</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Sports</div>
+            <div class="channel-program">Premier League: Arsenal vs Liverpool</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">2</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Movies</div>
+            <div class="channel-program">The Avengers (2012)</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">3</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY News</div>
+            <div class="channel-program">Evening News</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">4</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Kids</div>
+            <div class="channel-program">SpongeBob SquarePants</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">5</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Documentary</div>
+            <div class="channel-program">Planet Earth II</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">6</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Music</div>
+            <div class="channel-program">Top 40 Countdown</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">7</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Comedy</div>
+            <div class="channel-program">Stand-up Special</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">8</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Drama</div>
+            <div class="channel-program">Breaking Bad S03E10</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">9</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Sci-Fi</div>
+            <div class="channel-program">Star Trek: Discovery</div>
+          </div>
+        </div>
+
+        <div class="channel-item">
+          <div class="channel-logo">10</div>
+          <div class="channel-info">
+            <div class="channel-name">DSPLAY Reality</div>
+            <div class="channel-program">Master Chef</div>
+          </div>
+        </div>
+      </div>
 
       <div class="modal-footer">
         Use ↑↓ to navigate • OK to select • BACK to close
@@ -161,79 +241,26 @@
   </div>
 
   <script>
-    // Simple bridge-safe helper
-    function sendToApp(payload) {
-      try {
-        if (window.TVOverlay && typeof window.TVOverlay.send === 'function') {
-          window.TVOverlay.send(payload);
-        } else if (window.AndroidOverlay && typeof window.AndroidOverlay.postMessage === 'function') {
-          window.AndroidOverlay.postMessage(JSON.stringify(payload));
-        }
-      } catch (e) {}
-    }
+    // Handle keyboard navigation
+    let selectedIndex = 0;
+    const channelItems = document.querySelectorAll('.channel-item');
 
-    // State
-    let channels = [];
-    let selectedIndex = null; // 1-based index
+    document.addEventListener('keydown', function(event) {
+      // Remove selected class from all items
+      channelItems.forEach(item => item.classList.remove('selected'));
 
-    function render() {
-      const list = document.getElementById('channelList');
-      if (!list) return;
-      list.innerHTML = '';
-      channels.forEach((ch) => {
-        const item = document.createElement('div');
-        item.className = 'channel-item' + (selectedIndex === ch.number ? ' selected' : '');
-        item.innerHTML = `
-          <div class="channel-logo">${ch.number}</div>
-          <div class="channel-info">
-            <div class="channel-name">${ch.name}</div>
-            <div class="channel-program">${ch.authorized ? '' : 'Locked'}</div>
-          </div>`;
-        list.appendChild(item);
-      });
-
-      // Keep selected item in view
-      const selectedEl = list.querySelector('.channel-item.selected');
-      if (selectedEl) selectedEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    // Receive messages from app
-    window.dispatchTVOverlayMessage = function (message) {
-      try {
-        const data = typeof message === 'string' ? JSON.parse(message) : message;
-        if (data.type === 'state') {
-          channels = Array.isArray(data.channels) ? data.channels : [];
-          selectedIndex = data.selectedIndex || (channels[0] && channels[0].number) || null;
-          render();
-        } else if (data.type === 'selected-channel') {
-          selectedIndex = data.index;
-          render();
-        }
-      } catch (e) {}
-    };
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function (event) {
-      if (!channels.length) return;
-      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-        event.preventDefault();
-        const numbers = channels.map(c => c.number);
-        const currentPos = Math.max(0, numbers.indexOf(selectedIndex));
-        let nextPos = currentPos + (event.key === 'ArrowDown' ? 1 : -1);
-        if (nextPos < 0) nextPos = numbers.length - 1;
-        if (nextPos >= numbers.length) nextPos = 0;
-        selectedIndex = numbers[nextPos];
-        render();
-      } else if (event.key === 'Enter' || event.key === 'OK' || event.key === 'Select') {
-        if (selectedIndex != null) {
-          sendToApp({ type: 'select-channel', index: selectedIndex });
-        }
+      // Handle arrow keys
+      if (event.key === 'ArrowDown') {
+        selectedIndex = (selectedIndex + 1) % channelItems.length;
+      } else if (event.key === 'ArrowUp') {
+        selectedIndex = (selectedIndex - 1 + channelItems.length) % channelItems.length;
       }
-    });
 
-    // Ask the host app for the latest state on load
-    window.addEventListener('load', function () {
-      sendToApp({ type: 'request-state' });
+      // Add selected class to current item
+      channelItems[selectedIndex].classList.add('selected');
+
+      // Ensure the selected item is visible
+      channelItems[selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
   </script>
 </body>
