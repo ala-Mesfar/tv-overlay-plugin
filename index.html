@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Overlay</title>
-       <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV Overlay</title>
+      <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
+
 <body>
-    <div class="overlay-container">
-        <div class="overlay-title">TV Overlay</div>
-        <div class="overlay-content">
-            Press any key to interact with this overlay.<br>
-            Press BACK to return to the video.
-        </div>
+  <div class="samir">
+    <div class="overlay-title">TV Overlay</div>
+    <div class="overlay-content">
+      Press any key to interact with this overlay.<br>
+      Press BACK to return to the video.
     </div>
 
-    <script>
-        // Send key events back to the native layer
-        document.addEventListener('keydown', function(event) {
-            // This will be captured by the native layer
-            console.log('Key pressed in overlay:', event.keyCode);
-        });
-    </script>
+  </div>
+  <div class="overlay-container">
+  </div>
+
+  <script>
+    // Send key events back to the native layer
+    document.addEventListener('keydown', function (event) {
+      // This will be captured by the native layer
+      console.log('Key pressed in overlay:', event.keyCode);
+    });
+  </script>
 </body>
+
 </html>
