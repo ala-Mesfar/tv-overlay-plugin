@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Channel List Overlay</title>
+  <title>Channel List</title>
   <style>
     /* Reset and base styles */
     * {
@@ -16,6 +16,7 @@
       width: 100%;
       height: 100%;
       background-color: transparent !important;
+      background: none !important;
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
@@ -33,6 +34,8 @@
       background-color: transparent !important;
       /* Ensure no background color at all */
       background: none !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
     }
     
     /* Channel list modal */
